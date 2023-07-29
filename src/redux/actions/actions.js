@@ -413,10 +413,11 @@ export const clearCart = () => {
 };
 
 export const addFav = (product) => {
+  const endpoint = "http://localhost:3001/favorite";
   return async (dispatch) => {
     try {
-      // console.log(product);
-      const { data } = await axios.post(`${ENDPOINT}favorite`, product);
+      console.log(product);
+      const { data } = await axios.post(endpoint, product);
       return dispatch({
         type: ADD_FAV,
         payload: data,
@@ -428,10 +429,10 @@ export const addFav = (product) => {
 };
 
 export const removeFav = (id) => {
-  // const endpoint = `http://localhost:3001/favorite/${id}`;
+  const endpoint = `http://localhost:3001/favorite/${id}`;
   return async (dispatch) => {
     try {
-      const { data } = await axios.delete(`${ENDPOINT}favorite/${id}`);
+      const { data } = await axios.delete(endpoint);
       return dispatch({
         type: REMOVE_FAV,
         payload: data,
@@ -445,10 +446,10 @@ export const removeFav = (id) => {
 //Filter
 
 export const priceHigherLower = () => {
-  // const endpoint = "http://localhost:3001/filter/price/higher-lower";
+  const endpoint = "http://localhost:3001/filter/price/higher-lower";
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`${ENDPOINT}filter/price/higher-lower`);
+      const { data } = await axios.get(endpoint);
       return dispatch({
         type: PRICE_HIGHER_LOWER,
         payload: data,
@@ -460,10 +461,10 @@ export const priceHigherLower = () => {
 };
 
 export const priceLowerHigher = () => {
-  // const endpoint = "http://localhost:3001/filter/price/lower-higher";
+  const endpoint = "http://localhost:3001/filter/price/lower-higher";
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`${ENDPOINT}filter/price/lower-higher`);
+      const { data } = await axios.get(endpoint);
       return dispatch({
         type: PRICE_LOWER_HIGHER,
         payload: data,
@@ -475,10 +476,10 @@ export const priceLowerHigher = () => {
 };
 
 export const filterNameAsc = () => {
-  // const endpoint = "http://localhost:3001/filter/name/asc";
+  const endpoint = "http://localhost:3001/filter/name/asc";
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`${ENDPOINT}filter/name/asc`);
+      const { data } = await axios.get(endpoint);
       return dispatch({
         type: FILTER_NAME_ASC,
         payload: data,
@@ -490,10 +491,10 @@ export const filterNameAsc = () => {
 };
 
 export const filterNameDesc = () => {
-  // const endpoint = "http://localhost:3001/filter/name/desc";
+  const endpoint = "http://localhost:3001/filter/name/desc";
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`${ENDPOINT}filter/name/desc`);
+      const { data } = await axios.get(endpoint);
       return dispatch({
         type: FILTER_NAME_DESC,
         payload: data,
