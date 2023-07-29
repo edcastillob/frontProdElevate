@@ -412,7 +412,7 @@ export const clearCart = () => {
   };
 };
 
-export const addFav = (product) => { 
+export const addFav = (product) => {
   return async (dispatch) => {
     try {
       // console.log(product);
@@ -428,10 +428,10 @@ export const addFav = (product) => {
 };
 
 export const removeFav = (id) => {
-  // const endpoint = `http://localhost:3001/favorite/${id}`;  
+  // const endpoint = `http://localhost:3001/favorite/${id}`;
   return async (dispatch) => {
     try {
-      const { data } = await axios.delete(`${ENDPOINT}favorite/${id}`)
+      const { data } = await axios.delete(`${ENDPOINT}favorite/${id}`);
       return dispatch({
         type: REMOVE_FAV,
         payload: data,
@@ -448,7 +448,7 @@ export const priceHigherLower = () => {
   // const endpoint = "http://localhost:3001/filter/price/higher-lower";
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`${ENDPOINT}filter/price/higher-lower`)
+      const { data } = await axios.get(`${ENDPOINT}filter/price/higher-lower`);
       return dispatch({
         type: PRICE_HIGHER_LOWER,
         payload: data,
