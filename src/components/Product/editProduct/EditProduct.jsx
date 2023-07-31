@@ -149,9 +149,10 @@ export const EditProduct = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // console.log("Datos enviados: ", changeProduct);   
+    // console.log("Datos enviados: ", changeProduct);
+    dispatch(editProduct(id, changeProduct));
     toast.success("¡Edit Product successfully!");
-    navigate('/settings')
+    navigate('/dashboard')
   };
 
   // console.log("productDetail: ", productDetail);
@@ -160,10 +161,13 @@ export const EditProduct = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.divLeft}>
+      
         <hr />
         {/* Formulario */}
         <form onSubmit={handleSubmit} className={styles.form}>
+        <h4 style={{ fontFamily: "Poppins", marginBottom: "1rem" }}>
+            Edit Product
+          </h4>
           {/* Categoria de Producto */}
           <div className="d-flex justify-content-around">
             <select
@@ -180,7 +184,7 @@ export const EditProduct = () => {
                 </option>
               ))}
             </select>
-          
+          </div>
 
           {/* Nombre de Producto */}
 
@@ -193,30 +197,35 @@ export const EditProduct = () => {
             onChange={handleChange}
             defaultValue={productDetail.name}
           />
-        </div>
+          <div className="d-flex justify-content-around">
+            {/* brand de Producto */}
+            <input
+              className="form-control mb-3 w-50 d-end"
+              type="text"
+              name="brand"
+              placeholder="Product brand"
+              value={changeProduct.brand}
+              onChange={handleChange}
+            />
+            {/* {errors.brand && (
+              <p className={styles.error}>{errors.brand}</p>
+          )} */}
+            <select
+              className="form-control mb-3 w-50 d-end"
+              name="condition"
+              value={changeProduct.condition}
+              onChange={handleChange}
+            >
+              <option value="">Select condition</option>
+              <option value="Brand New">Brand New</option>
+              <option value="Used">Used</option>
+              <option value="Like New">Like New</option>
+            </select>
+            {/* {errors.condition && (
+              <p className={styles.error}>{errors.condition}</p>
+            )} */}
+          </div>
 
-        <div className="d-flex justify-content-around">
-          {/* brand de Producto */}
-          <input
-            className="form-control mb-3 w-50 d-end"
-            type="text"
-            name="brand"
-            placeholder="Product brand"
-            value={changeProduct.brand}
-            onChange={handleChange}
-          />
-          <select
-  className="form-control mb-3 w-50 d-end"
-  name="condition"
-  value={changeProduct.condition}
-  onChange={handleChange}
->
-  <option value="">Select condition</option>
-  <option value="Brand New">Brand New</option>
-  <option value="Used">Used</option>
-  <option value="Like New">Like New</option>
-</select>
-        </div>
           {/* Descripcion de Producto */}
 
           <ReactQuill
@@ -389,11 +398,11 @@ export const EditProduct = () => {
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-dark">
-            edit product
+          <button type="submit" className={styles.create}>
+            Update product
           </button>
         </form>
       </div>
-    </div>
+    
   );
 };

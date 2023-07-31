@@ -25,8 +25,6 @@ import {
   EDIT_PROVIDER,
   PRICE_HIGHER_LOWER,
   PRICE_LOWER_HIGHER,
-  FILTER_NAME_ASC,
-  FILTER_NAME_DESC,
   DELETE_PRODUCT,
   DELETE_CATEGORY,
   DELETE_PROVIDER,
@@ -34,6 +32,8 @@ import {
   DELETE_USERS,
   EDIT_USERS,
   GET_USER_ID,
+  FILTER_DATA,
+  FILTER_NAME,
 } from "./types";
 import axios from "axios";
 import { ENDPOINT } from "../../components/endpoint/ENDPOINT";
@@ -310,9 +310,9 @@ export const login = (userData) => {
     return async (dispatch) => {
       const response = await axios.post(`${ENDPOINT}login`, userData);
       if (response.data) {
-        const user = response.data.User;
-        localStorage.setItem("user", JSON.stringify(user));
-        window.location.reload();
+        const user = response.data.User; 
+        localStorage.setItem("user", JSON.stringify(user));       
+        window.location.reload()
         return dispatch({ type: LOGIN, payload: user });
       }
       throw new Error("Credenciales inválidas");
@@ -413,10 +413,10 @@ export const clearCart = () => {
 };
 
 export const addFav = (product) => {
-  const endpoint = "http://localhost:3001/favorite";
+  const endpoint = `${ENDPOINT}favorite`;
   return async (dispatch) => {
     try {
-      console.log(product);
+      // console.log(product);
       const { data } = await axios.post(endpoint, product);
       return dispatch({
         type: ADD_FAV,
@@ -429,7 +429,8 @@ export const addFav = (product) => {
 };
 
 export const removeFav = (id) => {
-  const endpoint = `http://localhost:3001/favorite/${id}`;
+  const endpoint = `${ENDPOINT}favorite/${id}`;
+
   return async (dispatch) => {
     try {
       const { data } = await axios.delete(endpoint);
@@ -446,57 +447,39 @@ export const removeFav = (id) => {
 //Filter
 
 export const priceHigherLower = () => {
-  const endpoint = "http://localhost:3001/filter/price/higher-lower";
   return async (dispatch) => {
-    try {
-      const { data } = await axios.get(endpoint);
-      return dispatch({
-        type: PRICE_HIGHER_LOWER,
-        payload: data,
-      });
-    } catch (error) {
-      window.alert(error);
-    }
+    return dispatch({
+      type: PRICE_HIGHER_LOWER,
+    });
   };
 };
 
 export const priceLowerHigher = () => {
-  const endpoint = "http://localhost:3001/filter/price/lower-higher";
   return async (dispatch) => {
-    try {
-      const { data } = await axios.get(endpoint);
-      return dispatch({
-        type: PRICE_LOWER_HIGHER,
-        payload: data,
-      });
-    } catch (error) {
-      window.alert(error);
-    }
+    return dispatch({
+      type: PRICE_LOWER_HIGHER,
+    });
   };
 };
 
 export const filterNameAsc = () => {
-  const endpoint = "http://localhost:3001/filter/name/asc";
   return async (dispatch) => {
-    try {
-      const { data } = await axios.get(endpoint);
-      return dispatch({
-        type: FILTER_NAME_ASC,
-        payload: data,
-      });
-    } catch (error) {
-      window.alert(error);
-    }
+    return dispatch({
+      type: FILTER_NAME,
+    });
   };
 };
 
-export const filterNameDesc = () => {
-  const endpoint = "http://localhost:3001/filter/name/desc";
+export const filterData = (filters) => {
+
+  const endpoint = `${ENDPOINT}filter/data`;
+
+
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(endpoint);
+      const { data } = await axios.post(endpoint, filters);
       return dispatch({
-        type: FILTER_NAME_DESC,
+        type: FILTER_DATA,
         payload: data,
       });
     } catch (error) {

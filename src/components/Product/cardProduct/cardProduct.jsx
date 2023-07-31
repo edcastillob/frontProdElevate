@@ -38,7 +38,6 @@ export const CardProduct = ({ product }) => {
     } else {
       setIsFav(true);
       dispatch(addFav(productWithUser));
-      navigate("/favorites");
     }
   };
 
@@ -70,30 +69,49 @@ export const CardProduct = ({ product }) => {
     ...product,
     user: currentUser
       ? currentUser.uid
-      : "3da16669-2425-4b38-a7d5-40ce000558d7",
+      : "691e3625-97aa-403e-9ec2-57b400b09ffa",
   };
 
   return (
     <div className={styles.cardContainer}>
-      <div className={styles.favContainer}>
-        {isFav ? (
-          <button onClick={handleFavorite}>❤️</button>
-        ) : (
-          <button onClick={handleFavorite}>🤍</button>
-        )}
-      </div>
       <Link
         title="Detail Product"
         to={`/productid/${id}`}
         className={styles.link}
       >
+        {/* {isFav ? (
+          <button className={styles.favButton} onClick={handleFavorite}>
+            <h3 style={{ color: "#000924" }}>
+              <ion-icon name="heart"></ion-icon>
+            </h3>
+          </button>
+        ) : (
+          <button className={styles.favButton} onClick={handleFavorite}>
+            <h3>
+              <ion-icon name="heart-empty"></ion-icon>
+            </h3>
+          </button>
+        )} */}
         <div className={styles.divImg}>
           <img className={styles.img} src={images} alt="product" />
         </div>
       </Link>
       <div className={styles.description}>
+      {isFav ? (
+          <button className={styles.favButton} onClick={handleFavorite}>
+            <h3 style={{ color: "#000924" }}>
+              <ion-icon name="heart"></ion-icon>
+            </h3>
+          </button>
+        ) : (
+          <button className={styles.favButton} onClick={handleFavorite}>
+            <h3>
+              <ion-icon name="heart-empty"></ion-icon>
+            </h3>
+          </button>
+        )}
         <h6 className={styles.title}>{name}</h6>
-        <h5 className={styles.category}> {category}</h5>
+        <h6 className={styles.category}> {category}</h6>
         <span className={styles.priceLabel}>Brand</span>
         <h6 className={styles.price}>{brand}</h6>
         <span className={styles.priceLabel}>Condition</span>
