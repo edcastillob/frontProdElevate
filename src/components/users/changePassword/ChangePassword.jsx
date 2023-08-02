@@ -16,7 +16,7 @@ export const  ChangePassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userMail = location.state.userMail;
-  console.log("xxx", userMail)
+  
 
   const [passwordError, setPasswordError] = useState("");
 
@@ -87,7 +87,7 @@ export const  ChangePassword = () => {
     toast.success("¡Edit user successfully!");
     navigate("/home");
   };
-  console.log(changeUser)
+  // console.log(changeUser)
   return(
     <div className={styles.container}>
 
