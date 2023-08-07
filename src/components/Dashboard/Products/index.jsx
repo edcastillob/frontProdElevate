@@ -17,6 +17,7 @@ import yes from "../../../assets/yes.png";
 import { useTranslation } from 'react-i18next';
 
 const Products = ({ toggleActive, currentLanguage }) => {
+  
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
   const [showConfirmation, setShowConfirmation] = useState(false);
