@@ -1,45 +1,42 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import styles from "../Dashboard.module.css";
 import logo from "../../../assets/logo.png";
 
 import { BsPeople } from "react-icons/bs";
-import { MdSearch, MdMenu } from "react-icons/md";
+import { MdMenu } from "react-icons/md";
 import { AiOutlineComment, AiOutlineShoppingCart } from "react-icons/ai";
 
-import { dataSales, dataProducts } from "../data";
-import {
-  Chart as ChartJS,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from "chart.js";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsers, showProducts } from "../../../redux/actions/actions";
 
-import { Bar, Pie } from "react-chartjs-2";
+import BarChart from "../Charts/BarModel";
+import PieChart from "../Charts/PieModel";
+import { useTranslation } from 'react-i18next';
 
-ChartJS.register(
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+const Panel = ({ toggleActive, currentLanguage }) => {
+  const { t } = useTranslation('global');
+  const dispatch = useDispatch();
+  
+  /** Show Users */ 
+  const users = useSelector((state) => state.users);
+  
+  const sortedUsers = users
+  .slice()
+  .sort((a, b) => a.name.localeCompare(b.name));
+  
+  /** Show Prodcuts */ 
+  const products = useSelector((state) => state.products);
 
-ChartJS.register(Tooltip, Legend, ArcElement);
+  const sortedProducts = products
+  .slice()
+  .sort((a, b) => a.salePrice - b.salePrice);
+  const firstFiveItems = sortedProducts.slice(0, 5);
 
-const options = {
-  responsive: true,
-  scales: {
-    y: {
-      beginAtZero: true,
-    },
-  },
-};
+  useEffect(() => {
+    dispatch(getUsers());
+    dispatch(showProducts());
+  }, []);
 
-const Panel = ({ toggleActive }) => {
   return (
     <>
       {/* <-- main --> */}
@@ -48,13 +45,6 @@ const Panel = ({ toggleActive }) => {
         <div className={styles.toggle} onClick={toggleActive}>
           <MdMenu />
         </div>
-        {/* search */}
-        {/* <div className={styles.search}>
-            <label>
-              <input type="text" placeholder="Search here..." />
-              <MdSearch size="2em" className={styles.icon} />
-            </label>
-          </div> */}
         {/* userImg */}
         {/* <div className={styles.user}>
           <img src={logo} />
@@ -65,8 +55,8 @@ const Panel = ({ toggleActive }) => {
       <div className={styles.cardBox}>
         <div className={styles.card}>
           <div>
-            <div className={styles.numbers}>1,290</div>
-            <div className={styles.cardName}>Sales</div>
+            <div className={styles.numbers}>{products.length}</div>
+            <div className={styles.cardName}>{t("dashboard.products", { lng: currentLanguage })}</div>
           </div>
           <div className={styles.iconBx}>
             <AiOutlineShoppingCart />
@@ -75,8 +65,8 @@ const Panel = ({ toggleActive }) => {
 
         <div className={styles.card}>
           <div>
-            <div className={styles.numbers}>250</div>
-            <div className={styles.cardName}>Customers</div>
+            <div className={styles.numbers}>{users.length}</div>
+            <div className={styles.cardName}>{t("dashboard.users", { lng: currentLanguage })}</div>
           </div>
           <div className={styles.iconBx}>
             <BsPeople />
@@ -85,8 +75,8 @@ const Panel = ({ toggleActive }) => {
 
         <div className={styles.card}>
           <div>
-            <div className={styles.numbers}>200</div>
-            <div className={styles.cardName}>Reviews</div>
+            <div className={styles.numbers}>20</div>
+            <div className={styles.cardName}>{t("dashboard.reviews", { lng: currentLanguage })}</div>
           </div>
           <div className={styles.iconBx}>
             <AiOutlineComment />
@@ -97,112 +87,75 @@ const Panel = ({ toggleActive }) => {
       {/* Add Charts */}
       <div className={styles.graphBox}>
         <div className={styles.box}>
-          <span>monthly sales</span>
-          <Bar
-            style={{ padding: "20px", width: "80%" }}
-            data={dataSales}
-            options={options}
-          />
+          <h2>{t("dashboard.by-condition", { lng: currentLanguage })}</h2>
+          <BarChart currentLanguage={currentLanguage} />
         </div>
         <div className={styles.box}>
-          <span>Most selled products</span>
-          <Pie options={options} data={dataProducts} />
+          <span>{t("dashboard.most-selled-products", { lng: currentLanguage })}</span>
+          <PieChart currentLanguage={currentLanguage}/>
         </div>
       </div>
 
       <div className={styles.details}>
-        {/* order details list */}
+        {/* products list */}
         <div className={styles.recentOrders}>
           <div className={styles.cardHeader}>
-            <h2>Recent Orders</h2>
-            <a href="#" className={styles.btn}>
+            <h2>{t("dashboard.by-price", { lng: currentLanguage })}</h2>
+            {/* <a href="#" className={styles.btn}>
               View All
-            </a>
+            </a> */}
           </div>
           <table>
             <thead>
               <tr>
-                <td>Product</td>
-                <td>Price</td>
-                <td>Payment</td>
-              </tr>
+                <td>{t("dashboard.name", { lng: currentLanguage })}</td>
+                <td>{t("dashboard.price", { lng: currentLanguage })}</td>
+                <td>{t("dashboard.condition", { lng: currentLanguage })}</td>
+                <td>REF.</td>
+                </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>PC Gamer</td>
-                <td>$2500</td>
-                <td>Credit Card</td>
-              </tr>
-              <tr>
-                <td>Apple Watch</td>
-                <td>$1200</td>
-                <td>Credit Card</td>
-              </tr>
-              <tr>
-                <td>HP Laptop</td>
-                <td>$1000</td>
-                <td>Credit Card</td>
-              </tr>
-              <tr>
-                <td>Mouse Gamer</td>
-                <td>$500</td>
-                <td>Debit Card</td>
-              </tr>
+            {
+              firstFiveItems?.map(product => (
+                <tr key={product.id}>
+                  <td>{product.name}</td>
+                  <td>$ {product.salePrice}</td>
+                  <td>{product.condition}</td>
+                  <td>
+                    <img src={product.images} width={50} height={50}/>
+                  </td>
+                </tr>
+              ))
+            }
             </tbody>
           </table>
         </div>
 
-        {/* customers */}
+        {/* Users Table */}
         <div className={styles.recentCustomers}>
           <div className={styles.cardHeader}>
-            <h2>Recent Customers</h2>
+            <h2>{t("dashboard.recent-users", { lng: currentLanguage })}</h2>
           </div>
-          <table>
-            <tr>
-              <td width="60px">
-                <div className={styles.imgBx}>
-                  <img src={logo} />
-                </div>
-              </td>
-              <td>
-                <h4>Veralucia</h4>
-                <span>Peru</span>
-              </td>
-            </tr>
-            <tr>
-              <td width="60px">
-                <div className={styles.imgBx}>
-                  <img src={logo} />
-                </div>
-              </td>
-              <td>
-                <h4>Leo</h4>
-                <span>Peru</span>
-              </td>
-            </tr>
-            <tr>
-              <td width="60px">
-                <div className={styles.imgBx}>
-                  <img src={logo} />
-                </div>
-              </td>
-              <td>
-                <h4>Yhamira</h4>
-                <span>Peru</span>
-              </td>
-            </tr>
-            <tr>
-              <td width="60px">
-                <div className={styles.imgBx}>
-                  <img src={logo} />
-                </div>
-              </td>
-              <td>
-                <h4>Cristian</h4>
-                <span>Peru</span>
-              </td>
-            </tr>
-          </table>
+          {
+            sortedUsers.map(user => (
+              <table key={user.id}>
+                <tbody>
+                  <tr>
+                    <td width="60px">
+                      <div className={styles.imgBx}>
+                        <img src={user.image} />
+                      </div>
+                    </td>
+                    <td>
+                      <h4>{user.name}</h4>
+                      <span>{user.email}</span>
+                      <p>{user.address}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            ))
+          }
         </div>
       </div>
       {/* </div> */}

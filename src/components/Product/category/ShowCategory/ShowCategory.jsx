@@ -1,15 +1,17 @@
 import styles from "../../../Dashboard/Dashboard.module.css";
-import { MdMenu } from "react-icons/md";
+import { MdMenu, MdSearch } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCategory, getCategory } from "../../../../redux/actions/actions";
 import { Link } from "react-router-dom";
 import { Table } from "reactstrap";
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
-export const ShowCategory = ({ toggleActive }) => {
+export const ShowCategory = ({ toggleActive, currentLanguage }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
+  const { t } = useTranslation('global');
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -19,8 +21,8 @@ export const ShowCategory = ({ toggleActive }) => {
   const category = useSelector((state) => state.category);
   const [searchCategory, setSearchCategory] = useState("");
 
-  if (!category || category.length === 0) return <div>Loading...</div>;
-  if (!Array.isArray(category)) return <div>Loading...</div>;
+  if (!category || category.length === 0) return <div>{t("user-all.loading", { lng: currentLanguage })}</div>;
+  if (!Array.isArray(category)) return <div>{t("user-all.loading", { lng: currentLanguage })}</div>;
 
   const sortedCategory = category
     .slice()
@@ -55,50 +57,56 @@ export const ShowCategory = ({ toggleActive }) => {
       <div className={styles.customers}>
         <div className={styles.wrapper}>
           <div className={styles.customersHeader}>
-            <h2 style={{fontFamily:'Poppins'}}>Categories</h2>
+            <h2 style={{fontFamily:'Poppins'}}>{t("show-category.categories", { lng: currentLanguage })}</h2>
           </div>
 
-      <input
-        type="text"
-        className="form-control w-25 h-50"
-        placeholder="Search category"
-        value={searchCategory}
-        onChange={(event) => setSearchCategory(event.target.value)}
-      />
+          {/* input search */}
+          <div className={styles.search}>
+            <label>
+              <input
+                type="text"
+                placeholder={t("show-category.search", { lng: currentLanguage })}
+                value={searchCategory}
+                onChange={(event) => setSearchCategory(event.target.value)}
+              />
+                <MdSearch size="2em" className={styles.icon} />
+            </label>
+          </div>
+
           <div className={styles.categoryContainer}>
-        {filteredCategory?.map((category) => (
-          <table key={category.id} className={styles.table}>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>
-                  <Link
-                    title="Edit Category"
-                    to={`/categoryedit/${category.id}`}
-                  >
-                    <button className={styles.edit}>
-                      <ion-icon name="create"></ion-icon>
-                    </button>
-                  </Link>
-                  <button
-                    className={styles.delete}
-                    onClick={() => handleDeleteCategory(category.id)}
-                  >
-                    <ion-icon name="trash"></ion-icon>
-                  </button>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{category.name}</td>
-                <td>{category.description}</td>
-                <td>{null}</td>
-              </tr>
-            </tbody>
-          </table>
-        ))}
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>{t("show-category.name", { lng: currentLanguage })}</th>
+                  <th>{t("show-category.description", { lng: currentLanguage })}</th>
+                  <th>{t("show-category.actions", { lng: currentLanguage })}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCategory?.map((category) => (
+                  <tr key={category.id}>
+                    <td style={{ padding: '1.5rem' }}>{category.name}</td>
+                    <td style={{ padding: '1.5rem' }}>{category.description}</td>
+                    <td style={{ padding: '1.5rem' }}>
+                      <Link
+                        title="Edit Category"
+                        to={`/categoryedit/${category.id}`}
+                      >
+                        <button className={styles.edit}>
+                          <ion-icon name="create"></ion-icon>
+                        </button>
+                      </Link>
+                      {/* <button
+                        className={styles.delete}
+                        onClick={() => handleDeleteCategory(category.id)}
+                      >
+                        <ion-icon name="trash"></ion-icon>
+                      </button> */}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
       </div>
         </div>
       </div>

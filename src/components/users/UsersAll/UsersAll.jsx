@@ -1,5 +1,5 @@
 import styles from "../../Dashboard/Dashboard.module.css";
-import { MdMenu } from "react-icons/md";
+import { MdMenu, MdSearch } from "react-icons/md";
 import { useState } from "react"; // Importa useState
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,16 +7,16 @@ import { deleteUsers, getUsers } from "../../../redux/actions/actions";
 import { Link } from "react-router-dom";
 import { BsTabletFill } from "react-icons/bs";
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 
 
 
 
-
-export const UsersAll = ({ toggleActive }) => {
+export const UsersAll = ({ toggleActive, currentLanguage }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
-
+  const { t } = useTranslation('global');
 
 
   const dispatch = useDispatch();
@@ -27,8 +27,8 @@ export const UsersAll = ({ toggleActive }) => {
   const users = useSelector((state) => state.users);
   const [searchUsers, setSearchUsers] = useState("");
 
-  if (!users || users.length === 0) return <div>Loading...</div>;
-  if (!Array.isArray(users)) return <div>Loading...</div>;
+  if (!users || users.length === 0) return <div>{t("user-all.loading", { lng: currentLanguage })}</div>;
+  if (!Array.isArray(users)) return <div>{t("user-all.loading", { lng: currentLanguage })}</div>;
 
   const sortedUsers = users
     .slice()
@@ -61,57 +61,63 @@ export const UsersAll = ({ toggleActive }) => {
       <div className={styles.customers}>
         <div className={styles.wrapper}>
           <div className={styles.customersHeader}>
-            <h2 style={{fontFamily:'Poppins'}}>Users</h2>
+            <h2 style={{fontFamily:'Poppins'}}>{t("user-all.users", { lng: currentLanguage })}</h2>
           </div>
 
-      <input
-        type="text"
-        className="form-control w-25 h-50"
-        placeholder="Search user"
-        value={searchUsers}
-        onChange={(event) => setSearchUsers(event.target.value)}
-      />
+          {/* input search */}
+          <div className={styles.search}>
+            <label>
+              <input
+                type="text"
+                placeholder={t("user-all.search", { lng: currentLanguage })}
+                value={searchUsers}
+                onChange={(event) => setSearchUsers(event.target.value)}
+              />
+                <MdSearch size="2em" className={styles.icon} />
+            </label>
+          </div>
+
           <div className={styles.userContainer}>
-        {filteredUsers?.map((user) => (
-          <table key={user.id} className={styles.table}>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>
-                  <Link title="Edit user" to={`/userEdit/${user.id}`}>
-                    <button className={styles.edit}>
-                      <ion-icon name="create"></ion-icon>
-                    </button>
-                  </Link>
-                  {/* <button
-                    className={styles.delete}
-                    onClick={() => handleDeleteUsers(user.id)}
-                  >
-                    <ion-icon name="trash"></ion-icon>
-                  </button> */}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div className={styles.divImg}>
-                    <img
-                      className={styles.img}
-                      src={user.image}
-                      alt={user.name}
-                    />
-                  </div>
-                </td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{null}</td>
-              </tr>
-            </tbody>
-          </table>
-        ))}
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>{t("user-all.user", { lng: currentLanguage })}</th>
+                  <th>{t("user-all.name", { lng: currentLanguage })}</th>
+                  <th>Email</th>
+                  <th>{t("user-all.actions", { lng: currentLanguage })}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredUsers?.map((user) => (
+                  <tr key={user.id}>
+                    <td>
+                      <div className={styles.divImg}>
+                        <img
+                          className={styles.img}
+                          src={user.image}
+                          alt={user.name}
+                        />
+                      </div>
+                    </td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>
+                      <Link title="Edit user" to={`/userEdit/${user.id}`}>
+                        <button className={styles.edit}>
+                          <ion-icon name="create"></ion-icon>
+                        </button>
+                      </Link>
+                      {/* <button
+                        className={styles.delete}
+                        onClick={() => handleDeleteUsers(user.id)}
+                      >
+                        <ion-icon name="trash"></ion-icon>
+                      </button> */}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
       </div>
         </div>
         

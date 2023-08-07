@@ -1,18 +1,19 @@
 import styles from "../Dashboard.module.css";
-import { MdMenu } from "react-icons/md";
+import { MdMenu, MdSearch } from "react-icons/md";
 import { useState } from "react"; // Importa useState
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProvider, getProvider } from "../../../redux/actions/actions";
 import { Link } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 
 
-
-const Providers = ({ toggleActive }) => {
+const Providers = ({ toggleActive, currentLanguage }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [providerIdToDelete, setProviderIdToDelete] = useState(null);
+  const { t } = useTranslation('global');
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -22,8 +23,8 @@ const Providers = ({ toggleActive }) => {
   const provider = useSelector((state) => state.provider);
   const [searchProvider, setSearchProvider] = useState("");
 
-  if (!provider || provider.length === 0) return <div>Loading...</div>;
-  if (!Array.isArray(provider)) return <div>Loading...</div>;
+  if (!provider || provider.length === 0) return <div>{t("user-all.loading", { lng: currentLanguage })}</div>;
+  if (!Array.isArray(provider)) return <div>{t("user-all.loading", { lng: currentLanguage })}</div>;
 
   const sortedProvider = provider
     .slice()
@@ -58,55 +59,60 @@ const Providers = ({ toggleActive }) => {
       <div className={styles.customers}>
         <div className={styles.wrapper}>
           <div className={styles.customersHeader}>
-            <h2 style={{fontFamily:'Poppins'}}>Providers</h2>
+            <h2 style={{fontFamily:'Poppins'}}>{t("providers-all.providers", { lng: currentLanguage })}</h2>
           </div>
 
-      <input
-        type="text"
-        className="form-control h-50 w-25"
-        style={{height:'50px'}}
-        placeholder="Search provider"
-        value={searchProvider}
-        onChange={(event) => setSearchProvider(event.target.value)}
-      />
+          {/* input search */}
+          <div className={styles.search}>
+            <label>
+              <input
+                 type="text"
+                 placeholder={t("providers-all.search", { lng: currentLanguage })}
+                 value={searchProvider}
+                 onChange={(event) => setSearchProvider(event.target.value)}
+              />
+                <MdSearch size="2em" className={styles.icon} />
+            </label>
+          </div>
+
           <div className={styles.tablesContainer}>
-          {filteredProvider?.map((provider) => (
-              <table key={provider.id} className={styles.table}>
+            <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Document N°</th>
+                  <th>{t("providers-all.name", { lng: currentLanguage })}</th>
+                  <th>{t("providers-all.document", { lng: currentLanguage })}</th>
                   <th>Email</th>
-                  <th>Phone N°</th>
-                  <th>
-                    <Link
-                      title="Edit provider"
-                      to={`/proveedoredit/${provider.id}`}
-                    >
-                      <button className={styles.edit}>
-                        <ion-icon name="create"></ion-icon>
-                      </button>
-                    </Link>
-                    <button
-                      className={styles.delete}
-                      onClick={() => handleDeleteProvider(provider.id)}
-                    >
-                      <ion-icon name="trash"></ion-icon>
-                    </button>
-                  </th>
+                  <th>{t("providers-all.phone", { lng: currentLanguage })}</th>
+                  <th>{t("providers-all.actions", { lng: currentLanguage })}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>{provider.name}</td>
-                  <td>{provider.identification}</td>
-                  <td>{provider.email}</td>
-                  <td>{provider.numPhone}</td>
-                  <td>{null}</td>
-                </tr>
+                {filteredProvider?.map((provider) => (
+                  <tr key={provider.id} >
+                    <td style={{ padding: '1.5rem' }}>{provider.name}</td>
+                    <td style={{ padding: '1.5rem' }}>{provider.identification}</td>
+                    <td style={{ padding: '1.5rem' }}>{provider.email}</td>
+                    <td style={{ padding: '1.5rem' }}>{provider.numPhone}</td>
+                    <td>
+                      <Link
+                        title="Edit provider"
+                        to={`/proveedoredit/${provider.id}`}
+                      >
+                        <button className={styles.edit}>
+                          <ion-icon name="create"></ion-icon>
+                        </button>
+                      </Link>
+                      {/* <button
+                        className={styles.delete}
+                        onClick={() => handleDeleteProvider(provider.id)}
+                      >
+                        <ion-icon name="trash"></ion-icon>
+                      </button> */}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
-          ))}
           </div>
         </div>
       </div>
