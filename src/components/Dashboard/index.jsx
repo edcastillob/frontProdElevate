@@ -10,7 +10,6 @@ import {
   showProductsInactive,
   activeProduct,
 } from "../../../redux/actions/actions";
-// import { Modal, Button } from 'react-bootstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import swal from "sweetalert";
 import yes from "../../../assets/yes.png";
