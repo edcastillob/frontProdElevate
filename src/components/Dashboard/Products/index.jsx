@@ -11,6 +11,8 @@ import {
   activeProduct,
 } from "../../../redux/actions/actions";
 // import { Modal, Button } from 'react-bootstrap';
+const userActive = useSelector((state) => state.userLog);
+
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import swal from "sweetalert";
 import yes from "../../../assets/yes.png";
@@ -46,8 +48,8 @@ const Products = ({ toggleActive, currentLanguage }) => {
   );
 
   const handleDeleteProduct = (productId) => {
-    setProductIdToDelete(productId);
-    setShowConfirmation(true);
+    dispatch(deleteProduct(productId));
+    
   };
 
   const handleConfirmDelete = () => {
@@ -148,12 +150,14 @@ const Products = ({ toggleActive, currentLanguage }) => {
                           <ion-icon name="create"></ion-icon>
                         </button>
                       </Link>
-                      {/* <button
-                        className={styles.delete}
-                        onClick={() => handleDeleteProduct(product.id)}
-                      >
-                        <ion-icon name="trash"></ion-icon>
-                      </button> */}
+                      {userActive.email === "edwar.castillo@gmail.com" && (
+                        <button
+                          className={styles.delete}
+                          onClick={() => handleDeleteProduct(product.id)}
+                        >
+                          <ion-icon name="trash"></ion-icon>
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
