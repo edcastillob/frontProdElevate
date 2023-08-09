@@ -6,11 +6,12 @@ export default function validateForm(
     description,
     purchasePrice,
     salePrice,
-    minimunStock,
+    minimumStock,
     provider,
     images
 ) {
     let errors = {};
+    let regexInteger = /^\d+$/
 
     if (!category) {
         errors.category = "Category is required";
@@ -18,42 +19,41 @@ export default function validateForm(
 
     if (!name) {
         errors.name = "Name is required";
-    } else if (name.length > 20) {
-        errors.name = "The name can't be longer than 20 characters";
+    } else if (name.length > 25) {
+        errors.name = "The name can't be longer than 25 characters";
     }; 
 
     if (!brand) {
-        errors.brand = "Brand is required";
+        errors.brand = "Brand's name is required";
     }; 
 
     if (!condition) {
-        errors.description = "Condition is required";
+        errors.condition = "Condition is required";
     }; 
 
     if (!description) {
         errors.description = "Description is required";
     } 
 
-    let purchase = parseFloat(purchasePrice)
     if (!purchasePrice) {
         errors.purchasePrice = "Purchase Price is required";
-    } else if (typeof purchase !== "number") {
+    } else if (!parseFloat(purchasePrice)) {
         errors.purchasePrice = "Purchase Price must be a number";
     };
 
-    let sale = parseFloat(salePrice)
     if (!salePrice) {
         errors.salePrice = "Sale Price is required";
-    } else if (typeof sale !== "number") {
+    } else if (!parseFloat(salePrice)) {
         errors.salePrice = "Sale Price must be a number";
     };
 
-    let minStock = parseInt(minimunStock); 
-    if (minimunStock) {
-        if (typeof minStock !== "number") {
-            errors.minimunStock = "Minimun stock must be a number";
-        }
-    };
+    if (!minimumStock) {
+        errors.minimumStock = "Minimun stock is required";
+    } else if (!parseInt(minimumStock)) {
+        errors.minimumStock = "Minimun stock must be a number";
+    } else if (!regexInteger.test(minimumStock)) {
+        errors.minimumStock = "Minimun stock must be a integer number"
+    }
 
     if (provider.length === 0) {
         errors.provider = "Provider is required";

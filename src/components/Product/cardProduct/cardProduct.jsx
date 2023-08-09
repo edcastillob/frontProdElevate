@@ -9,18 +9,24 @@ import {
 } from "../../../redux/actions/actions";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { StyledApp } from "../../../StyledComponents.js/StyledComponents";
 
-
-export const CardProduct = ({ product, user, userLocal, handleSignIn, currentLanguage }) => {
+export const CardProduct = ({
+  product,
+  user,
+  userLocal,
+  handleSignIn,
+  currentLanguage,
+}) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isFav, setIsFav] = useState(false);
   const { id, name, images, salePrice, brand, condition, categoryId } = product;
   const selectedCategory = useSelector((state) => state.category);
-  const { t } = useTranslation('global');
+  const theme = useSelector((state) => state.theme);
+  const { t } = useTranslation("global");
   const category =
-    selectedCategory.find((cat) => cat.id === categoryId)?.name ||
-    "Unknown Category";
+    selectedCategory.find((cat) => cat.id === categoryId)?.name || "";
 
   useEffect(() => {
     dispatch(getCategory());
@@ -64,7 +70,7 @@ export const CardProduct = ({ product, user, userLocal, handleSignIn, currentLan
       if (user) {
         const uid = user.uid;
         const userEmail = user.email;
-        console.log("desde useEffect: ",userEmail);
+        // console.log("desde useEffect: ",userEmail);
         setCurrentUser(user);
       } else {
         setCurrentUser(null);
@@ -74,60 +80,68 @@ export const CardProduct = ({ product, user, userLocal, handleSignIn, currentLan
 
   const productWithUser = {
     ...product,
-    user:  userActive.email,
+    user: userActive.email,
   };
-  console.log('userActive', userActive.email)
+  // console.log('userActive', userActive.email)
   return (
-    <div className={styles.cardContainer}>
-      <Link
-        title="Detail Product"
-        to={`/productid/${id}`}
-        className={styles.link}
-      >
-        <div className={styles.divImg}>
-          <img className={styles.img} src={images} alt="product" />
-        </div>
-      </Link>
-      <div className={styles.description}>
-        {userActive.isActive === true ? (
-          <div>
-            {isFav ? (
-              <button className={styles.favButton} onClick={handleFavorite}>
-                <h3 style={{ color: "#000924" }}>
-                  <ion-icon name="heart"></ion-icon>
-                </h3>
-              </button>
-            ) : (
-              <button className={styles.favButton} onClick={handleFavorite}>
-                <h3>
-                  <ion-icon name="heart-empty"></ion-icon>
-                </h3>
-              </button>
-            )}
-          </div>
-        ) : null}
-        <NavLink
+    <StyledApp theme={theme}>
+      <div className={styles.cardContainer}>
+        <Link
           title="Detail Product"
           to={`/productid/${id}`}
-          style={{ textDecoration: "none" }}
-          // className={styles.link}
+          className={styles.link}
         >
-          <h6 className={styles.title}>{name}</h6>
-        </NavLink>
-        <h6 className={styles.category}> {category}</h6>
-        <span className={styles.priceLabel}>{t("cardProduct.brand", { lng: currentLanguage })}</span>
-        <h6 className={styles.price}>{brand}</h6>
-        <span className={styles.priceLabel}>{t("cardProduct.condition", { lng: currentLanguage })}</span>
-        <h6 className={styles.price}>{condition}</h6>
-        <span className={styles.priceLabel}>{t("cardProduct.price", { lng: currentLanguage })}</span>
-        <h6 className={styles.price}>${salePrice}</h6>
-        <button
-          className={styles.buttonCart}
-          onClick={() => handledAddToCart(product)}
-        >
-          {t("cardProduct.add-to-cart", { lng: currentLanguage })}
-        </button>
+          <div className={styles.divImg}>
+            <img className={styles.img} src={images} alt="product" />
+          </div>
+        </Link>
+        <div className={styles.description}>
+          {userActive.isActive === true ? (
+            <div>
+              {isFav ? (
+                <button className={styles.favButton} onClick={handleFavorite}>
+                  <h3 style={{ color: "#000924" }}>
+                    <ion-icon name="heart"></ion-icon>
+                  </h3>
+                </button>
+              ) : (
+                <button className={styles.favButton} onClick={handleFavorite}>
+                  <h3>
+                    <ion-icon name="heart-empty"></ion-icon>
+                  </h3>
+                </button>
+              )}
+            </div>
+          ) : null}
+          <NavLink
+            title="Detail Product"
+            to={`/productid/${id}`}
+            style={{ textDecoration: "none" }}
+            // className={styles.link}
+          >
+            <h6 className={styles.title}>{name}</h6>
+          </NavLink>
+          <h6 className={styles.category}> {category}</h6>
+          <span className={styles.priceLabel}>
+            {t("cardProduct.brand", { lng: currentLanguage })}
+          </span>
+          <h6 className={styles.price}>{brand}</h6>
+          <span className={styles.priceLabel}>
+            {t("cardProduct.condition", { lng: currentLanguage })}
+          </span>
+          <h6 className={styles.price}>{condition}</h6>
+          <span className={styles.priceLabel}>
+            {t("cardProduct.price", { lng: currentLanguage })}
+          </span>
+          <h6 className={styles.price}>${salePrice}</h6>
+          <button
+            className={styles.buttonCart}
+            onClick={() => handledAddToCart(product)}
+          >
+            {t("cardProduct.add-to-cart", { lng: currentLanguage })}
+          </button>
+        </div>
       </div>
-    </div>
+    </StyledApp>
   );
 };

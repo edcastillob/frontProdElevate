@@ -16,7 +16,7 @@ export default function validateForm(
     if (!description) {
         errors.description = "Description is required";
     } else if (description.length > 40) {
-        errors.description = "The name can't be longer than 40 characters";
+        errors.description = "The description can't be longer than 40 characters";
     };
 
     return errors
