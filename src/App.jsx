@@ -283,9 +283,9 @@ function App({ user, userLocal }) {
               {/* Protege la ruta del dashboard */}
               <Route
                 path="/dashboard"
-                element={<Panel currentLanguage={currentLanguage} />}
+                // element={<Panel currentLanguage={currentLanguage} />}
               />
-              {/* <Route path="/dashboard" element={userActive?.roleId === 1 && <Panel currentLanguage={currentLanguage} /> }/> */}
+              <Route path="/dashboard" element={userActive?.roleId === 1 && <Panel currentLanguage={currentLanguage} /> }/>
 
               {/* {(currentUser || currentUserLocal) && (
             <Route path="/settings" element={<Configuration />} />
