@@ -1,1 +1,1 @@
-export const ENDPOINT = "https://prodelevate.netlify.app/";
+export const ENDPOINT = "https://prodelevatepf.onrender.com/";
