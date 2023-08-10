@@ -1,1 +1,1 @@
-export const ENDPOINT = "http://localhost:3001/";
+export const ENDPOINT = "https://prodelevate.netlify.app/";
