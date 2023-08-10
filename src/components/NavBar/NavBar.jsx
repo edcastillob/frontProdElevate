@@ -11,6 +11,7 @@ import {
   getRole,
   getUsers,
   getUserSystemLog,
+  toggleTheme,
 } from "../../redux/actions/actions";
 import userImg from "../.././assets/user.png";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
@@ -21,7 +22,7 @@ import es from "../.././assets/espana.png";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import swal from "sweetalert";
-
+import { StyledButton } from "../../StyledComponents.js/StyledComponents";
 
 export const NavBar = ({
   user,
@@ -60,10 +61,10 @@ export const NavBar = ({
   const handleLogoutClick = () => {
     if (userLocal) {
       dispatch(logout());
-      navigate('/home');
+      navigate("/home");
     } else {
       logoutUser();
-      navigate('/home');
+      navigate("/home");
     }
     window.location.reload();
   };
@@ -138,7 +139,6 @@ export const NavBar = ({
 
   useEffect(() => {
     if (userActive.isActive === false) {
-
       swal({
         title: "Inactive User",
         text: `${userActive.name}, your email ${userActive.email}
@@ -149,9 +149,8 @@ export const NavBar = ({
         if (res) {
           handleLogoutClick();
         }
-      });     
+      });
     }
-  
   }, [
     userActive.isActive,
     userActive.name,
@@ -171,11 +170,16 @@ export const NavBar = ({
           <img className="img-fluid" src={logo} alt="img-logo" />
         </Link>
         <Link style={{ textDecoration: "none", color: "#fff" }} to="/home">
-          <h6 className={styles.homeButton} style={{ fontFamily: "Poppins" }}>
-            Home
+          <h6 className={styles.casa} style={{ fontFamily: "Poppins" }}>
+          <ion-icon name="home"></ion-icon>
           </h6>
         </Link>
+
+        <StyledButton onClick={() => dispatch(toggleTheme())} >
+         <h2 className={styles.moonBtn}><ion-icon name="moon"></ion-icon></h2> 
+        </StyledButton>
       </div>
+
       <div className={styles.divSearch}></div>
       <div className={styles.items}>
         {/* LANGUAGE */}
@@ -257,8 +261,7 @@ export const NavBar = ({
             {/* Dropdown de opciones */}
             {isDropdownOpen && (
               <ul className={styles.dropdownOptions} style={{ zIndex: 10 }}>
-                {/* {userActive.roleId !== 10 && ( */}
-                {userActive.roleId !== 1000 && (
+                {userActive.roleId !== 1 && (                
                   <li>
                     <Link
                       to="/dashboard"
@@ -328,8 +331,8 @@ export const NavBar = ({
             {/* Dropdown de opciones */}
             {isDropdownOpen && (
               <ul className={styles.dropdownOptions} style={{ zIndex: 10 }}>
-                {/* {userActive.roleId !== 10 && ( */}
-                {userActive.roleId !== 1000 && (
+                {userActive.roleId !== 1 && (
+               
                   <li>
                     <Link
                       to="/dashboard"

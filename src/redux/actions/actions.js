@@ -40,8 +40,14 @@ import {
   SHOW_PRODUCTS_INACTIVE,
   ACTIVE_PRODUCT,
   POST_VERIFY_USER,
+  GET_USER_INACTIVE,
+  GET_USER_BY_NAME,
+  GET_ALL_FAVORITE,
   ADD_REVIEW,
   SHOW_REVIEWS_ID,
+  TOGGLE_THEME,
+  GET_USER_SEARCH_NAME,
+  GET_ALL_REVIEWS,
 } from "./types";
 import axios from "axios";
 import { ENDPOINT } from "../../components/endpoint/ENDPOINT";
@@ -68,11 +74,20 @@ export const showProducts = (page) => {
     throw new Error(error.message);
   }
 };
-export const showProductsInactive = () => {
+export const showProductsInactive = (page) => {
   try {
     return async (dispatch) => {
-      const { data } = await axios.get(`${ENDPOINT}productinactive`);
-      return dispatch({ type: SHOW_PRODUCTS_INACTIVE, payload: data });
+      const { data } = await axios.get(
+        `${ENDPOINT}productinactive?page=${page}`
+      );
+      return dispatch({
+        type: SHOW_PRODUCTS_INACTIVE,
+        payload: {
+          data: data.data,
+          totalPages: data.totalPages,
+          currentPage: page,
+        },
+      });
     };
   } catch (error) {
     throw new Error(error.message);
@@ -140,12 +155,50 @@ export const editProduct = (productId, changeProduct) => {
   };
 };
 
-export const getUsers = () => {
+export const getUsers = (page) => {
   try {
     return async (dispatch) => {
-      const { data } = await axios.get(`${ENDPOINT}user`);
+      const { data } = await axios.get(`${ENDPOINT}user?page=${page}`);
       // console.log(data);
       return dispatch({ type: GET_ALL_USERS, payload: data });
+    };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getUsersInactive = (page) => {
+  try {
+    return async (dispatch) => {
+      const { data } = await axios.get(`${ENDPOINT}user-inactive?page=${page}`);
+      // console.log(data);
+      return dispatch({
+        type: GET_USER_INACTIVE,
+        payload: {
+          data: data.data,
+          totalPages: data.totalPages,
+          currentPage: page,
+        },
+      });
+    };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getUsersByName = (page) => {
+  try {
+    return async (dispatch) => {
+      const { data } = await axios.get(`${ENDPOINT}user-by-name?page=${page}`);
+      // console.log(data);
+      return dispatch({
+        type: GET_USER_BY_NAME,
+        payload: {
+          data: data.data,
+          totalPages: data.totalPages,
+          currentPage: page,
+        },
+      });
     };
   } catch (error) {
     throw new Error(error.message);
@@ -166,6 +219,17 @@ export const editUser = (userId, changeUser) => {
   return async (dispatch) => {
     try {
       await axios.put(`${ENDPOINT}user/${userId}`, changeUser);
+      const userData = JSON.parse(localStorage.getItem("user"));
+      if (changeUser.identification) {
+        if (userData) {
+          userData.name = changeUser.name;
+          userData.identification = changeUser.identification;
+          userData.numPhone = changeUser.numPhone;
+          userData.image = changeUser.image;
+          localStorage.setItem("user", JSON.stringify(userData));
+          window.location.reload();
+        }
+      }
       return dispatch({
         type: EDIT_USERS,
         payload: { userId, changeUser },
@@ -280,6 +344,7 @@ export const categoryEdit = (categoryId, editCategory) => {
   return async (dispatch) => {
     try {
       await axios.put(`${ENDPOINT}category/${categoryId}`, editCategory);
+      window.location.reload();
       return dispatch({
         type: EDIT_CATEGORY,
         payload: { categoryId, editCategory },
@@ -329,6 +394,7 @@ export const editProvider = (providerId, editProvider) => {
   return async (dispatch) => {
     try {
       await axios.put(`${ENDPOINT}provider/${providerId}`, editProvider);
+      window.location.reload();
       return dispatch({
         type: EDIT_PROVIDER,
         payload: { providerId, editProvider },
@@ -475,7 +541,6 @@ export const clearCart = () => {
     dispatch({
       type: CLEAR_CART,
     });
-    
 
     return {
       type: CLEAR_CART,
@@ -491,6 +556,23 @@ export const addFav = (product) => {
       const { data } = await axios.post(endpoint, product);
       return dispatch({
         type: ADD_FAV,
+        payload: data,
+      });
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+};
+
+export const allFav = (user) => {
+  const endpoint = `${ENDPOINT}favorite-all`;
+  return async (dispatch) => {
+    try {
+      // console.log(product);
+      const { data } = await axios.get(`${endpoint}?user=${user}`);
+      // console.log("accion", user);
+      return dispatch({
+        type: GET_ALL_FAVORITE,
         payload: data,
       });
     } catch (error) {
@@ -630,7 +712,6 @@ export const getProductsByName = (page, name) => {
   }
 };
 
-
 export const verifyUser = (userData) => {
   // console.log("dates: ", userData)
   return async (dispatch) => {
@@ -675,4 +756,36 @@ export const showReviewsId = (id) => {
       throw new Error("Error fetching review.");
     }
   };
+};
+export const showReviews = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`${ENDPOINT}comment`);
+      dispatch({ type: GET_ALL_REVIEWS, payload: response.data });
+    } catch (error) {
+      throw new Error("Error fetching review.");
+    }
+  };
+};
+
+export const toggleTheme = () => ({
+  type: TOGGLE_THEME,
+});
+
+export const getSearchUsersName = (page, name) => {
+  try {
+    return async (dispatch) => {
+      const { data } = await axios.get(
+        `${ENDPOINT}user-name?page=${page}&name=${name}`
+      );
+
+      // console.log(data.data);
+      return dispatch({
+        type: GET_USER_SEARCH_NAME,
+        payload: data,
+      });
+    };
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
