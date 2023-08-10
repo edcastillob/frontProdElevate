@@ -8,6 +8,7 @@ import {
   getUsers,
   getUsersInactive,
   getUsersByName,
+  getSearchUsersName,
 } from "../../../redux/actions/actions";
 import { Link } from "react-router-dom";
 import { BsTabletFill } from "react-icons/bs";
@@ -29,9 +30,9 @@ export const UsersAll = ({ toggleActive, currentLanguage }) => {
 
   const [optionUsers, setoptionUsers] = useState([]);
   const [searchUsers, setSearchUsers] = useState("");
-  console.log(optionUsers);
-  console.log(currentPage);
-  console.log(totalPages);
+  // console.log(optionUsers);
+  // console.log(currentPage);
+  // console.log(totalPages);
   useEffect(() => {
     dispatch(getUsers(currentPage));
   }, []);
@@ -45,13 +46,13 @@ export const UsersAll = ({ toggleActive, currentLanguage }) => {
   // if (!Array.isArray(users))
   //   return <div>{t("user-all.loading", { lng: currentLanguage })}</div>;
 
-  const sortedUsers = users
-    .slice()
-    .sort((a, b) => a.email.localeCompare(b.email));
+  // const sortedUsers = users
+  //   .slice()
+  //   .sort((a, b) => a.email.localeCompare(b.email));
 
-  const filteredUsers = sortedUsers.filter((users) =>
-    users.email.toLowerCase().includes(searchUsers.toLowerCase())
-  );
+  // const filteredUsers = sortedUsers.filter((users) =>
+  //   users.email.toLowerCase().includes(searchUsers.toLowerCase())
+  // );
 
   const handleDeleteUsers = (UsersId) => {
     setUserIdToDelete(UsersId);
@@ -74,6 +75,17 @@ export const UsersAll = ({ toggleActive, currentLanguage }) => {
 
   const handleUsersByName = () => {
     dispatch(getUsersByName(currentPage));
+  };
+
+  const handleChange = (event) => {
+    const { value } = event.target;
+    event.preventDefault();
+    setSearchUsers(value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(getSearchUsersName(currentPage, searchUsers));
   };
 
   const handleNextPage = () => {
@@ -104,13 +116,29 @@ export const UsersAll = ({ toggleActive, currentLanguage }) => {
           {/* input search */}
           <div className={styles.search}>
             <label>
-              <input
-                type="text"
-                placeholder={t("user-all.search", { lng: currentLanguage })}
-                value={searchUsers}
-                onChange={(event) => setSearchUsers(event.target.value)}
-              />
-              <MdSearch size="2em" className={styles.icon} />
+              <form onChange={handleChange}>
+                <input
+                  type="text"
+                  placeholder={t("user-all.search", { lng: currentLanguage })}
+                />
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className={styles.btnSearch}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-search"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                  </svg>
+                </button>
+                <MdSearch size="2em" className={styles.icon} />
+              </form>
             </label>
           </div>
 
@@ -237,19 +265,21 @@ export const UsersAll = ({ toggleActive, currentLanguage }) => {
         </Modal.Footer>
       </Modal>
       <div>
-        <div>
+      <div className={styles.pages}>
           <button
             disabled={currentPage === 1}
-            onClick={() => dispatch(getUsers(currentPage - 1))}
+            onClick={() => dispatch(showProducts(currentPage - 1))}
+            className={styles.create}
           >
-            Anterior
+            <ion-icon name="arrow-round-back"></ion-icon>
           </button>
-          <span>Página {currentPage}</span>
+          <span>Page {currentPage}</span>
           <button
             disabled={currentPage === totalPages}
             onClick={handleNextPage}
+            className={styles.create}
           >
-            Siguiente
+            <ion-icon name="arrow-round-forward"></ion-icon>
           </button>
         </div>
       </div>

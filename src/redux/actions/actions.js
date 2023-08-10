@@ -46,6 +46,7 @@ import {
   ADD_REVIEW,
   SHOW_REVIEWS_ID,
   TOGGLE_THEME,
+  GET_USER_SEARCH_NAME,
   GET_ALL_REVIEWS,
 } from "./types";
 import axios from "axios";
@@ -569,7 +570,7 @@ export const allFav = (user) => {
     try {
       // console.log(product);
       const { data } = await axios.get(`${endpoint}?user=${user}`);
-      console.log("accion", user);
+      // console.log("accion", user);
       return dispatch({
         type: GET_ALL_FAVORITE,
         payload: data,
@@ -770,3 +771,21 @@ export const showReviews = () => {
 export const toggleTheme = () => ({
   type: TOGGLE_THEME,
 });
+
+export const getSearchUsersName = (page, name) => {
+  try {
+    return async (dispatch) => {
+      const { data } = await axios.get(
+        `${ENDPOINT}user-name?page=${page}&name=${name}`
+      );
+
+      // console.log(data.data);
+      return dispatch({
+        type: GET_USER_SEARCH_NAME,
+        payload: data,
+      });
+    };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

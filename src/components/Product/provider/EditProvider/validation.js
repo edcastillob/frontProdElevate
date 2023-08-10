@@ -1,48 +1,55 @@
 export default function validateForm(
-    name, 
-    email,
-    identification,
-    address,
-    numPhone
+  name, 
+  email,
+  address,
+  numPhone,
+  identification,
+  country,
 ) {
-    let errors = {};
-    let RegExpression = /^[a-zA-Z\s]*$/;
-    let emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  let errors = {};
+  let RegExpression = /^[a-zA-Z\s]*$/;
+  let emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!name) {
-        errors.name = "Name is required";
-    } else if (!RegExpression.test(name)) {
-        errors.name = "Numbers or special characters are not allowed";
-    } else if (name.length > 15) {
-        errors.name = "The name can't be longer than 15 characters";
-    }; 
+  if (!name) {
+      errors.name = "Name is required";
+  } else if (!RegExpression.test(name)) {
+      errors.name = "Numbers or special characters are not allowed";
+  } else if (name.length > 50) {
+      errors.name = "The name can't be longer than 40 characters";
+  }; 
 
-    if(!emailRegEx.test(email)){
-        errors.email = "This Email is not valid"
-    }
+  if (!email) {
+      errors.email = "Email is required";
+  } else if (!emailRegEx.test(email)) {
+      errors.email = "This Email is not valid"
+  };
 
-    if (!address) {
-        errors.address = "Address is required";
+  if (!address) {
+      errors.address = "Address is required";
+  }
+
+  if (
+      !numPhone ||
+      typeof numPhone !== "string" ||
+      numPhone.length < 7 ||
+      numPhone.length > 15
+    ) {
+      errors.numPhone = "Phone Number must be between 7 and 15 digits";
     }
 
     if (
-        !numPhone ||
-        typeof numPhone !== "string" ||
-        numPhone.length < 7 ||
-        numPhone.length > 15
-      ) {
-        errors.numPhone = "Phone Number must be between 7 and 15 digits";
-      }
+      !identification ||
+      typeof identification !== "string" ||
+      identification.length < 7 ||
+      identification.length > 30 ||
+      !/^\d+$/.test(identification)
+    ) {
+      errors.identification = "Document ID must contain 7-10 digits";
+    }
 
-      if (
-        !identification ||
-        typeof identification !== "string" ||
-        identification.length < 7 ||
-        identification.length > 10 ||
-        !/^\d+$/.test(identification)
-      ) {
-        errors.identification = "Document ID must contain 7-10 digits";
-      }
+  if (!country) {
+      errors.country = "Country is required"
+  }
 
-    return errors
+  return errors
 }
