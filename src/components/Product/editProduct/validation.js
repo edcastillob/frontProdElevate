@@ -12,7 +12,6 @@ export default function validateForm(
     images
 ) {
     let errors = {};
-    let regexInteger = /^\d+$/
 
     if (!category) {
         errors.category = "Category is required";
@@ -20,41 +19,42 @@ export default function validateForm(
 
     if (!name) {
         errors.name = "Name is required";
-    } else if (name.length > 25) {
-        errors.name = "The name can't be longer than 25 characters";
+    } else if (name.length > 20) {
+        errors.name = "The name can't be longer than 20 characters";
     }; 
 
     if (!brand) {
-        errors.brand = "Brand's name is required";
+        errors.brand = "Description is required";
     }; 
 
     if (!condition) {
-        errors.condition = "Condition is required";
+        errors.condition = "Description is required";
     }; 
 
     if (!description) {
         errors.description = "Description is required";
     }; 
 
+    let purchase = parseFloat(purchasePrice)
     if (!purchasePrice) {
         errors.purchasePrice = "Purchase Price is required";
-    } else if (!parseFloat(purchasePrice)) {
+    } else if (typeof purchase !== "number") {
         errors.purchasePrice = "Purchase Price must be a number";
     };
 
+    let sale = parseFloat(salePrice)
     if (!salePrice) {
         errors.salePrice = "Sale Price is required";
-    } else if (!parseFloat(salePrice)) {
+    } else if (typeof sale !== "number") {
         errors.salePrice = "Sale Price must be a number";
     };
 
-    if (!minStock) {
-        errors.minStock = "Minimun stock is required";
-    } else if (!parseInt(minStock)) {
-        errors.minStock = "Minimun stock must be a number";
-    } else if (!regexInteger.test(minStock)) {
-        errors.minStock = "Minimun stock must be a integer number"
-    }
+    let minimunStock = parseInt(minStock); 
+    if (minStock) {
+        if (typeof minimunStock !== "number") {
+            errors.minStock = "Minimun stock must be a number";
+        }
+    };
 
     if (provider.length === 0) {
         errors.provider = "Provider is required";
@@ -64,23 +64,16 @@ export default function validateForm(
         errors.images = "Images is required";
     };
 
+    let Stock = parseInt(stock);
+    let hasDot = stock.toString().include(".");
+    let hasComa = stock.toString().include(",");
     if (!stock) {
         errors.stock = "Stock is required";
-    } else if (!parseInt(stock)) {
+    } else if (typeof Stock !== "number") {
         errors.stock = "Stock must be a number";
-    } else if (!regexInteger.test(stock)) {
+    } else if (hasDot || hasComa) {
         errors.stock = "Stock must be a integer number";
-    }
-    // let Stock = parseInt(stock);
-    // let hasDot = stock.toString().include(".");
-    // let hasComa = stock.toString().include(",");
-    // if (!stock) {
-    //     errors.stock = "Stock is required";
-    // } else if (typeof Stock !== "number") {
-    //     errors.stock = "Stock must be a number";
-    // } else if (hasDot || hasComa) {
-    //     errors.stock = "Stock must be a integer number";
-    // };
+    };
 
     return errors
 }

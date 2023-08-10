@@ -9,24 +9,18 @@ import {
 } from "../../../redux/actions/actions";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { StyledApp } from "../../../StyledComponents.js/StyledComponents";
+import { useTranslation } from 'react-i18next';
 
-export const CardProduct = ({
-  product,
-  user,
-  userLocal,
-  handleSignIn,
-  currentLanguage,
-}) => {
+
+export const CardProduct = ({ product, user, userLocal, handleSignIn, currentLanguage }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isFav, setIsFav] = useState(false);
   const { id, name, images, salePrice, brand, condition, categoryId } = product;
   const selectedCategory = useSelector((state) => state.category);
-  const theme = useSelector((state) => state.theme);
-  const { t } = useTranslation("global");
+  const { t } = useTranslation('global');
   const category =
-    selectedCategory.find((cat) => cat.id === categoryId)?.name ||  "";
+    selectedCategory.find((cat) => cat.id === categoryId)?.name ||
+    "Unknown Category";
 
   useEffect(() => {
     dispatch(getCategory());
@@ -80,11 +74,10 @@ export const CardProduct = ({
 
   const productWithUser = {
     ...product,
-    user: userActive.email,
+    user:  userActive.email,
   };
   // console.log('userActive', userActive.email)
   return (
-    <StyledApp theme={theme}>
     <div className={styles.cardContainer}>
       <Link
         title="Detail Product"
@@ -113,29 +106,24 @@ export const CardProduct = ({
             )}
           </div>
         ) : null}
-        <div className={styles.divName}>
-          <NavLink
-            title="Detail Product"
-            to={`/productid/${id}`}
-            style={{ textDecoration: "none" }}
-            // className={styles.link}
-          >
-            <h6 className={styles.title}>{name}</h6>
-          </NavLink>
+          <div className={styles.divName}>
+        <NavLink
+          title="Detail Product"
+          to={`/productid/${id}`}
+          style={{ textDecoration: "none" }}
+          // className={styles.link}
+        > 
+          <h6 className={styles.title}>{name}</h6>
+
+        </NavLink>
         </div>
         <div className={styles.info}>
           <h6 className={styles.category}> {category}</h6>
-          <span className={styles.priceLabel}>
-            {t("cardProduct.brand", { lng: currentLanguage })}
-          </span>
+          <span className={styles.priceLabel}>{t("cardProduct.brand", { lng: currentLanguage })}</span>
           <h6 className={styles.price}>{brand}</h6>
-          <span className={styles.priceLabel}>
-            {t("cardProduct.condition", { lng: currentLanguage })}
-          </span>
+          <span className={styles.priceLabel}>{t("cardProduct.condition", { lng: currentLanguage })}</span>
           <h6 className={styles.price}>{condition}</h6>
-          <span className={styles.priceLabel}>
-            {t("cardProduct.price", { lng: currentLanguage })}
-          </span>
+          <span className={styles.priceLabel}>{t("cardProduct.price", { lng: currentLanguage })}</span>
           <h6 className={styles.price}>${salePrice}</h6>
         </div>
         <div className={styles.divBtn}>
@@ -148,6 +136,5 @@ export const CardProduct = ({
         </div>
       </div>
     </div>
-     </StyledApp>
   );
 };

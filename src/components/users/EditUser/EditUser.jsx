@@ -10,7 +10,6 @@ import "react-quill/dist/quill.snow.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { editUser, getRole, getUserId } from "../../../redux/actions/actions";
 import { useTranslation } from 'react-i18next';
-import validate from "./validation";
 
 export const EditUser = ({ currentLanguage }) => {
   const { t } = useTranslation('global');
@@ -88,17 +87,10 @@ export const EditUser = ({ currentLanguage }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const errors = validate(changeUser);
-    setErrors(errors);
-    if (Object.keys(errors).length === 0) {
-      dispatch(editUser(id, changeUser));
-      toast.success(t("edit-user.successfully", { lng: currentLanguage }));
-      setErrors({});
-      navigate("/dashboard");
-    } else {
-      toast.error("All fields must be filled Correctly");
-    }
     // console.log("Datos enviados: ", changeUser);
+    dispatch(editUser(id, changeUser));
+    toast.success(t("edit-user.successfully", { lng: currentLanguage }));
+    navigate("/dashboard");
   };
 
   const handleRemoveImage = () => {
@@ -163,9 +155,7 @@ export const EditUser = ({ currentLanguage }) => {
           onChange={handleChange}
           value={changeUser.name}
         />
-        {errors.name && (
-          <p className={styles.error}>{errors.name}</p>
-        )}
+        {/* {errors.name && <div className="invalid-feedback">{errors.name}</div>} */}
 
         {/* _____________EMAIL________________ */}
         <label>Email:</label>
@@ -177,9 +167,9 @@ export const EditUser = ({ currentLanguage }) => {
           onChange={handleChange}
           value={changeUser.email}
         />
-        {errors.email && (
-          <p className={styles.error}>{errors.email}</p>
-        )}
+        {/* {errors.email && (
+            <div className="invalid-feedback">{errors.email}</div>
+          )} */}
         {/* Estado del usuario */}
 
         {/* _____________ID________________ */}

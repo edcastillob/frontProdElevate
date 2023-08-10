@@ -13,7 +13,6 @@ import "react-toastify/dist/ReactToastify.css";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import validateForm from "./validation";
-// import { useTranslation } from "react-i18next";
 
 export const Product = () => {
   useEffect(() => {
@@ -87,42 +86,42 @@ export const Product = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(product);
-    const errors = validateForm(
-      product.category,
-      product.name,
-      product.brand,
-      product.condition,
-      product.description,
-      product.purchasePrice,
-      product.salePrice,
-      product.minimumStock,
-      product.provider,
-      product.images
-    );
-    setErrors(errors);
+    // console.log(product);
+    // const errors = validateForm (
+    //   product.category,
+    //   product.name,
+    //   product.brand,
+    //   product.condition,
+    //   product.description,
+    //   product.purchasePrice,
+    //   product.salePrice,
+    //   product.minimumStock,
+    //   product.provider,
+    //   product.images
+    // );
+    // setErrors(errors);
 
-    if (Object.keys(errors).length === 0) {
-      dispatch(addProduct(product));
-      toast.success("¡Product created successfully!");
-      setProduct({
-        category: "",
-        name: "",
-        brand: "",
-        condition: "",
-        description: "",
-        purchasePrice: "",
-        salePrice: "",
-        minimumStock: "",
-        provider: [],
-        images: [],
-      });
-      setErrors({});
-      // Reiniciar isImageUploaded a false después de enviar el formulario
-      setIsImageUploaded(false);
-    } else {
-      toast.error("Data is Incompleted. All fields must be filled Correctly");
-    }
+    // if (Object.keys(product).length === 0) {
+    dispatch(addProduct(product));
+    toast.success("¡Product created successfully!");
+    setProduct({
+      category: "",
+      name: "",
+      brand: "",
+      condition: "",
+      description: "",
+      purchasePrice: "",
+      salePrice: "",
+      minimumStock: "",
+      provider: [],
+      images: [],
+    });
+    // setErrors({});
+    // Reiniciar isImageUploaded a false después de enviar el formulario
+    setIsImageUploaded(false);
+    // } else {
+    //   toast.error("Data is Incompleted. All fields must be filled Correctly");
+    // }
   };
   // console.log("provider: ", provider);
   // console.log(product);
@@ -151,7 +150,9 @@ export const Product = () => {
               </option>
             ))}
           </select>
-          {errors.category && <p className={styles.error}>{errors.category}</p>}
+          {/* {errors.category && (
+                  <p className={styles.error}>{errors.category}</p>
+            )} */}
           {/* Nombre de Producto */}
 
           <input
@@ -162,7 +163,9 @@ export const Product = () => {
             value={product.name}
             onChange={handleChange}
           />
-          {errors.name && <p className={styles.error}>{errors.name}</p>}
+          {/* {errors.name && (
+                  <p className={styles.error}>{errors.name}</p>
+            )} */}
         </div>
         <div className="d-flex justify-content-around">
           {/* brand de Producto */}
@@ -174,7 +177,9 @@ export const Product = () => {
             value={product.brand}
             onChange={handleChange}
           />
-          {errors.brand && <p className={styles.error}>{errors.brand}</p>}
+          {/* {errors.brand && (
+              <p className={styles.error}>{errors.brand}</p>
+          )} */}
           <select
             className="form-control mb-3 w-50 d-end"
             name="condition"
@@ -311,7 +316,9 @@ export const Product = () => {
           </div>
           {/* ... */}
         </div>
-        {errors.provider && <p className={styles.error}>{errors.provider}</p>}
+        {/* {errors.provider && (
+              <p className={styles.error}>{errors.provider}</p>
+          )} */}
         <br />
 
         {/* <UploadImg onImageUpload={handleImageUpload} /> */}
@@ -333,7 +340,9 @@ export const Product = () => {
             }
           />
         </div>
-        {errors.images && <p className={styles.error}>{errors.images}</p>}
+        {/* {errors.images && (
+             <p className={styles.error}>{errors.images}</p>
+          )} */}
         <br />
         <button className={styles.create}>Create</button>
       </form>

@@ -34,9 +34,6 @@ export const GET_USER_ID = "GET_USER_ID";
 export const GET_USER_EMAIL = "GET_USER_EMAIL";
 export const GET_USER_SYSTEM_LOG = "GET_USER_SYSTEM_LOG";
 export const POST_VERIFY_USER = "POST_VERIFY_USER";
-export const GET_USER_INACTIVE = "GET_USER_INACTIVE";
-export const GET_USER_BY_NAME = "GET_USER_BY_NAME";
-export const GET_USER_SEARCH_NAME = "GET_USER_SEARCH_NAME";
 
 //Cart
 export const ADD_TO_CART = "ADD_TO_CART";
@@ -49,7 +46,6 @@ export const CALCULE_TOTALS = "CALCULE_TOTALS";
 //Favorite
 export const ADD_FAV = "ADD_FAV";
 export const REMOVE_FAV = "REMOVE_FAV";
-export const GET_ALL_FAVORITE = "GET_ALL-FAVORITE";
 
 //filter
 export const PRICE_HIGHER_LOWER = "PRICE_HIGHER_LOWER";
@@ -66,7 +62,5 @@ export const GET_ROLE = "GET_ROLE";
 export const ADD_REVIEW = "ADD_REVIEW";
 export const SHOW_REVIEWS = "SHOW_REVIEWS";
 export const SHOW_REVIEWS_ID = "SHOW_REVIEWS_ID";
-export const GET_ALL_REVIEWS = "GET_ALL_REVIEWS";
 
-//Theme
-export const TOGGLE_THEME = "TOGGLE_THEME";
+

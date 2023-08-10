@@ -11,7 +11,6 @@ export default function validateForm(
     images
 ) {
     let errors = {};
-    let regexInteger = /^\d+$/
 
     if (!category) {
         errors.category = "Category is required";
@@ -19,12 +18,12 @@ export default function validateForm(
 
     if (!name) {
         errors.name = "Name is required";
-    } else if (name.length > 50) {
-        errors.name = "The name can't be longer than 50 characters";
+    } else if (name.length > 20) {
+        errors.name = "The name can't be longer than 20 characters";
     }; 
 
     if (!brand) {
-        errors.brand = "Brand's name is required";
+        errors.brand = "Brand is required";
     }; 
 
     if (!condition) {
@@ -51,8 +50,6 @@ export default function validateForm(
         errors.minimumStock = "Minimun stock is required";
     } else if (!parseInt(minimumStock)) {
         errors.minimumStock = "Minimun stock must be a number";
-    } else if (!regexInteger.test(minimumStock)) {
-        errors.minimumStock = "Minimun stock must be a integer number"
     }
 
     if (provider.length === 0) {
