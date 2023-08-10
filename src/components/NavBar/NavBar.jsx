@@ -258,7 +258,7 @@ export const NavBar = ({
             {isDropdownOpen && (
               <ul className={styles.dropdownOptions} style={{ zIndex: 10 }}>
                 {/* {userActive.roleId !== 10 && ( */}
-                {userActive.roleId !== 10 && (
+                {userActive.roleId !== 1000 && (
                   <li>
                     <Link
                       to="/dashboard"
@@ -329,7 +329,7 @@ export const NavBar = ({
             {isDropdownOpen && (
               <ul className={styles.dropdownOptions} style={{ zIndex: 10 }}>
                 {/* {userActive.roleId !== 10 && ( */}
-                {userActive.roleId !== 1 && (
+                {userActive.roleId !== 1000 && (
                   <li>
                     <Link
                       to="/dashboard"
